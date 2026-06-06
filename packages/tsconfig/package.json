@@ -1,0 +1,10 @@
+{
+  "name": "@proyecto-modular/tsconfig",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Configuración base de TypeScript para el monorepo",
+  "exports": {
+    "./base": "./tsconfig.base.json",
+    "./react": "./tsconfig.react.json"
+  }
+}

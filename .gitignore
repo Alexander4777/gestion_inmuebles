@@ -1,0 +1,44 @@
+# Personal
+CLAUDE.local.md
+
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+build/
+.next/
+*.tsbuildinfo
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Test
+coverage/
+
+# Turbo
+.turbo/
+
+# Database
+*.db
+*.sqlite
+migrations/*.js
+migrations/*.map

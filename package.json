@@ -1,0 +1,32 @@
+{
+  "name": "proyecto-modular",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Sistema de gestión de arrendamiento de bienes inmuebles para el mercado mexicano",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "turbo test",
+    "db:generate": "turbo db:generate",
+    "db:migrate": "turbo db:migrate",
+    "db:push": "turbo db:push",
+    "typecheck": "turbo typecheck"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.15.0",
+    "eslint": "^9.15.0",
+    "prettier": "^3.5.0",
+    "turbo": "^2.4.0",
+    "typescript": "^5.7.0",
+    "typescript-eslint": "^8.20.0"
+  },
+  "packageManager": "pnpm@11.5.1",
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=11.0.0"
+  }
+}

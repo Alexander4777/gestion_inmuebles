@@ -1,0 +1,10 @@
+{
+  "extends": "@proyecto-modular/tsconfig/react",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "vite-env.d.ts"]
+}

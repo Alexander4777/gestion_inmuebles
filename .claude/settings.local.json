@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /home/alex/proyecto_modular remote -v)",
+      "Bash(git init *)",
+      "Bash(git branch *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(corepack enable *)",
+      "Bash(corepack prepare *)",
+      "Bash(pnpm --version)",
+      "Bash(pnpm install *)",
+      "Bash(pnpm typecheck *)",
+      "Bash(pnpm *)",
+      "Bash(git -C /home/alex/proyecto_modular log --oneline)",
+      "Bash(git -C /home/alex/proyecto_modular status)",
+      "Bash(git -C /home/alex/proyecto_modular add -A)"
+    ]
+  }
+}

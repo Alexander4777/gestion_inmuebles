@@ -1,0 +1,43 @@
+{
+  "name": "@proyecto-modular/api",
+  "version": "0.0.0",
+  "private": true,
+  "description": "API REST para el sistema de gestión de arrendamiento",
+  "type": "module",
+  "main": "./src/index.ts",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push"
+  },
+  "dependencies": {
+    "@proyecto-modular/shared": "workspace:*",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "drizzle-orm": "^0.41.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.14.0",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@proyecto-modular/tsconfig": "workspace:*",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/node": "catalog:",
+    "@types/pg": "^8.11.0",
+    "drizzle-kit": "^0.30.0",
+    "tsx": "^4.19.0",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}
