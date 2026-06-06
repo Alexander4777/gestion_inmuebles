@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import { recibosRouter } from '../modulos/recibos/recibos.router';
 
 export function crearApp() {
   const app = express();
@@ -13,8 +14,11 @@ export function crearApp() {
     res.json({ estado: 'ok', version: '0.0.0' });
   });
 
-  // Las rutas de módulos se montarán aquí
-  // Ejemplo: app.use('/api/propiedades', propiedadesRouter);
+  // ── Módulos ──────────────────────────────────────────────────────────────────
+  app.use('/api/recibos', recibosRouter);
+  // Próximos: app.use('/api/propiedades', propiedadesRouter);
+  // Próximos: app.use('/api/inquilinos', inquilinosRouter);
+  // Próximos: app.use('/api/contratos', contratosRouter);
 
   return app;
 }

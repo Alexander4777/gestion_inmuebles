@@ -14,7 +14,9 @@
       "Bash(pnpm *)",
       "Bash(git -C /home/alex/proyecto_modular log --oneline)",
       "Bash(git -C /home/alex/proyecto_modular status)",
-      "Bash(git -C /home/alex/proyecto_modular add -A)"
+      "Bash(git -C /home/alex/proyecto_modular add -A)",
+      "Bash(git -C /home/alex/proyecto_modular diff --cached --stat)",
+      "Bash(git -C /home/alex/proyecto_modular commit -m 'feat: esqueleto inicial del proyecto modular *)"
     ]
   }
 }

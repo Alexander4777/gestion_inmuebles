@@ -1,6 +1,9 @@
 import { RootRoute, Route } from '@tanstack/react-router';
 import { AppLayout } from '@/core/layout/AppLayout';
 import { DashboardPage } from '@/modulos/dashboard/DashboardPage';
+import { RecibosPage } from '@/modulos/recibos/RecibosPage';
+import { ReciboCrearPage } from '@/modulos/recibos/ReciboCrearPage';
+import { ReciboDetallePage } from '@/modulos/recibos/ReciboDetallePage';
 
 // ── Raíz ───────────────────────────────────────────────────────────────────────
 const rootRoute = new RootRoute({
@@ -33,10 +36,23 @@ const contratosRoute = new Route({
   component: () => <div>Contratos</div>,
 });
 
+// ── Recibos ────────────────────────────────────────────────────────────────────
 const recibosRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/recibos',
-  component: () => <div>Recibos</div>,
+  component: RecibosPage,
+});
+
+const reciboCrearRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/recibos/crear',
+  component: ReciboCrearPage,
+});
+
+const reciboDetalleRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/recibos/$id',
+  component: ReciboDetallePage,
 });
 
 // ── Árbol ──────────────────────────────────────────────────────────────────────
@@ -46,4 +62,6 @@ export const routeTree = rootRoute.addChildren([
   inquilinosRoute,
   contratosRoute,
   recibosRoute,
+  reciboCrearRoute,
+  reciboDetalleRoute,
 ]);
