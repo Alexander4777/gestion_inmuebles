@@ -8,7 +8,8 @@ import { LoginPage } from '@/modulos/auth/LoginPage';
 
 // ── Raíz ───────────────────────────────────────────────────────────────────────
 const rootRoute = new RootRoute({
-  beforeLoad: () => {
+  beforeLoad: ({ location }) => {
+    if (location.pathname === '/login') return;
     const token = localStorage.getItem('token');
     if (!token) throw new Response(null, { status: 302, headers: { Location: '/login' } });
   },
