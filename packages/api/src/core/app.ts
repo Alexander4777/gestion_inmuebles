@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import { authRouter } from '../modulos/auth/auth.router';
 import { recibosRouter } from '../modulos/recibos/recibos.router';
 
 export function crearApp() {
@@ -15,6 +16,7 @@ export function crearApp() {
   });
 
   // ── Módulos ──────────────────────────────────────────────────────────────────
+  app.use('/api/auth', authRouter);
   app.use('/api/recibos', recibosRouter);
   // Próximos: app.use('/api/propiedades', propiedadesRouter);
   // Próximos: app.use('/api/inquilinos', inquilinosRouter);

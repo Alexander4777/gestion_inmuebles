@@ -4,13 +4,25 @@ import { DashboardPage } from '@/modulos/dashboard/DashboardPage';
 import { RecibosPage } from '@/modulos/recibos/RecibosPage';
 import { ReciboCrearPage } from '@/modulos/recibos/ReciboCrearPage';
 import { ReciboDetallePage } from '@/modulos/recibos/ReciboDetallePage';
+import { LoginPage } from '@/modulos/auth/LoginPage';
 
 // ── Raíz ───────────────────────────────────────────────────────────────────────
 const rootRoute = new RootRoute({
+  beforeLoad: () => {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Response(null, { status: 302, headers: { Location: '/login' } });
+  },
   component: AppLayout,
 });
 
-// ── Rutas ──────────────────────────────────────────────────────────────────────
+// Login fuera del layout (público)
+const loginRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/login',
+  component: LoginPage,
+});
+
+// ── Rutas protegidas ────────────────────────────────────────────────────────────
 const indexRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/',
@@ -57,6 +69,7 @@ const reciboDetalleRoute = new Route({
 
 // ── Árbol ──────────────────────────────────────────────────────────────────────
 export const routeTree = rootRoute.addChildren([
+  loginRoute,
   indexRoute,
   propiedadesRoute,
   inquilinosRoute,

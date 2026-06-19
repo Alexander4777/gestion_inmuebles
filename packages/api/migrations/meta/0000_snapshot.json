@@ -1,0 +1,844 @@
+{
+  "id": "7f2874f9-dced-4036-8fde-42ceb12d89e9",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.contratos": {
+      "name": "contratos",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "propiedad_id": {
+          "name": "propiedad_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "inquilino_id": {
+          "name": "inquilino_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fecha_inicio": {
+          "name": "fecha_inicio",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fecha_fin": {
+          "name": "fecha_fin",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "renta_mensual": {
+          "name": "renta_mensual",
+          "type": "numeric(12, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "deposito": {
+          "name": "deposito",
+          "type": "numeric(12, 2)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'0'"
+        },
+        "periodicidad_pago": {
+          "name": "periodicidad_pago",
+          "type": "periodicidad_pago",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'mensual'"
+        },
+        "estatus": {
+          "name": "estatus",
+          "type": "estatus_contrato",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'vigente'"
+        },
+        "activo": {
+          "name": "activo",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "creado_en": {
+          "name": "creado_en",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "actualizada_en": {
+          "name": "actualizada_en",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "contratos_propiedad_id_propiedades_id_fk": {
+          "name": "contratos_propiedad_id_propiedades_id_fk",
+          "tableFrom": "contratos",
+          "tableTo": "propiedades",
+          "columnsFrom": [
+            "propiedad_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "contratos_inquilino_id_inquilinos_id_fk": {
+          "name": "contratos_inquilino_id_inquilinos_id_fk",
+          "tableFrom": "contratos",
+          "tableTo": "inquilinos",
+          "columnsFrom": [
+            "inquilino_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.facturas": {
+      "name": "facturas",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "recibo_id": {
+          "name": "recibo_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "uuid": {
+          "name": "uuid",
+          "type": "varchar(36)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "folio_fiscal": {
+          "name": "folio_fiscal",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "serie": {
+          "name": "serie",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "folio": {
+          "name": "folio",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "uso_cfdi": {
+          "name": "uso_cfdi",
+          "type": "varchar(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'D10'"
+        },
+        "estatus": {
+          "name": "estatus",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pendiente'"
+        },
+        "xml_path": {
+          "name": "xml_path",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pdf_path": {
+          "name": "pdf_path",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "timbrado_en": {
+          "name": "timbrado_en",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cancelado_en": {
+          "name": "cancelado_en",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "creado_en": {
+          "name": "creado_en",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "actualizada_en": {
+          "name": "actualizada_en",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "facturas_recibo_id_recibos_id_fk": {
+          "name": "facturas_recibo_id_recibos_id_fk",
+          "tableFrom": "facturas",
+          "tableTo": "recibos",
+          "columnsFrom": [
+            "recibo_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.inquilinos": {
+      "name": "inquilinos",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "nombre": {
+          "name": "nombre",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "apellido_paterno": {
+          "name": "apellido_paterno",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "apellido_materno": {
+          "name": "apellido_materno",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rfc": {
+          "name": "rfc",
+          "type": "varchar(13)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "curp": {
+          "name": "curp",
+          "type": "varchar(18)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "telefono": {
+          "name": "telefono",
+          "type": "varchar(15)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "correo": {
+          "name": "correo",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "activo": {
+          "name": "activo",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "creado_en": {
+          "name": "creado_en",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "actualizada_en": {
+          "name": "actualizada_en",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.mantenimientos": {
+      "name": "mantenimientos",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "propiedad_id": {
+          "name": "propiedad_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "categoria": {
+          "name": "categoria",
+          "type": "categoria_mantenimiento",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "descripcion": {
+          "name": "descripcion",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "costo": {
+          "name": "costo",
+          "type": "numeric(12, 2)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'0'"
+        },
+        "estatus": {
+          "name": "estatus",
+          "type": "estatus_mantenimiento",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pendiente'"
+        },
+        "reportado_por": {
+          "name": "reportado_por",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "completado_en": {
+          "name": "completado_en",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "creado_en": {
+          "name": "creado_en",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "actualizada_en": {
+          "name": "actualizada_en",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "mantenimientos_propiedad_id_propiedades_id_fk": {
+          "name": "mantenimientos_propiedad_id_propiedades_id_fk",
+          "tableFrom": "mantenimientos",
+          "tableTo": "propiedades",
+          "columnsFrom": [
+            "propiedad_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.movimientos_contables": {
+      "name": "movimientos_contables",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "tipo": {
+          "name": "tipo",
+          "type": "tipo_movimiento",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "categoria": {
+          "name": "categoria",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "monto": {
+          "name": "monto",
+          "type": "numeric(12, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "descripcion": {
+          "name": "descripcion",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fecha": {
+          "name": "fecha",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "propiedad_id": {
+          "name": "propiedad_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contrato_id": {
+          "name": "contrato_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "factura_id": {
+          "name": "factura_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "creado_en": {
+          "name": "creado_en",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "actualizada_en": {
+          "name": "actualizada_en",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "movimientos_contables_propiedad_id_propiedades_id_fk": {
+          "name": "movimientos_contables_propiedad_id_propiedades_id_fk",
+          "tableFrom": "movimientos_contables",
+          "tableTo": "propiedades",
+          "columnsFrom": [
+            "propiedad_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "movimientos_contables_contrato_id_contratos_id_fk": {
+          "name": "movimientos_contables_contrato_id_contratos_id_fk",
+          "tableFrom": "movimientos_contables",
+          "tableTo": "contratos",
+          "columnsFrom": [
+            "contrato_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "movimientos_contables_factura_id_facturas_id_fk": {
+          "name": "movimientos_contables_factura_id_facturas_id_fk",
+          "tableFrom": "movimientos_contables",
+          "tableTo": "facturas",
+          "columnsFrom": [
+            "factura_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.propiedades": {
+      "name": "propiedades",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "nombre": {
+          "name": "nombre",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "calle": {
+          "name": "calle",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "numero": {
+          "name": "numero",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "colonia": {
+          "name": "colonia",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "codigo_postal": {
+          "name": "codigo_postal",
+          "type": "varchar(5)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ciudad": {
+          "name": "ciudad",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "estado": {
+          "name": "estado",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipo": {
+          "name": "tipo",
+          "type": "tipo_propiedad",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'casa'"
+        },
+        "activa": {
+          "name": "activa",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "creada_en": {
+          "name": "creada_en",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "actualizada_en": {
+          "name": "actualizada_en",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.recibos": {
+      "name": "recibos",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "contrato_id": {
+          "name": "contrato_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "numero_recibo": {
+          "name": "numero_recibo",
+          "type": "varchar(30)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "periodo_inicio": {
+          "name": "periodo_inicio",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "periodo_fin": {
+          "name": "periodo_fin",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fecha_limite_pago": {
+          "name": "fecha_limite_pago",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "renta": {
+          "name": "renta",
+          "type": "numeric(12, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "otros_cobros": {
+          "name": "otros_cobros",
+          "type": "numeric(12, 2)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'0'"
+        },
+        "total": {
+          "name": "total",
+          "type": "numeric(12, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "estatus": {
+          "name": "estatus",
+          "type": "estatus_recibo",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pendiente'"
+        },
+        "factura_id": {
+          "name": "factura_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pagado_en": {
+          "name": "pagado_en",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "creado_en": {
+          "name": "creado_en",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "actualizada_en": {
+          "name": "actualizada_en",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "recibos_contrato_id_contratos_id_fk": {
+          "name": "recibos_contrato_id_contratos_id_fk",
+          "tableFrom": "recibos",
+          "tableTo": "contratos",
+          "columnsFrom": [
+            "contrato_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "recibos_numero_recibo_unique": {
+          "name": "recibos_numero_recibo_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "numero_recibo"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.categoria_mantenimiento": {
+      "name": "categoria_mantenimiento",
+      "schema": "public",
+      "values": [
+        "electricidad",
+        "fontaneria",
+        "carpinteria",
+        "albañileria",
+        "materiales",
+        "otro"
+      ]
+    },
+    "public.estatus_contrato": {
+      "name": "estatus_contrato",
+      "schema": "public",
+      "values": [
+        "vigente",
+        "proximo-a-vencer",
+        "vencido",
+        "terminado",
+        "cancelado"
+      ]
+    },
+    "public.estatus_mantenimiento": {
+      "name": "estatus_mantenimiento",
+      "schema": "public",
+      "values": [
+        "pendiente",
+        "en-progreso",
+        "completado",
+        "cancelado"
+      ]
+    },
+    "public.estatus_recibo": {
+      "name": "estatus_recibo",
+      "schema": "public",
+      "values": [
+        "pendiente",
+        "pagado",
+        "vencido",
+        "cancelado"
+      ]
+    },
+    "public.periodicidad_pago": {
+      "name": "periodicidad_pago",
+      "schema": "public",
+      "values": [
+        "mensual",
+        "bimestral",
+        "anual"
+      ]
+    },
+    "public.tipo_movimiento": {
+      "name": "tipo_movimiento",
+      "schema": "public",
+      "values": [
+        "ingreso",
+        "gasto"
+      ]
+    },
+    "public.tipo_propiedad": {
+      "name": "tipo_propiedad",
+      "schema": "public",
+      "values": [
+        "casa",
+        "departamento",
+        "local-comercial",
+        "bodega",
+        "otro"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

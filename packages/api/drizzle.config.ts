@@ -5,6 +5,6 @@ export default defineConfig({
   out: './migrations',
   dialect: 'postgresql',
   dbCredentials: {
-    url: process.env.DATABASE_URL!,
+    url: "postgresql://postgres:postgres@localhost:5432/proyecto_modular",
   },
 });
