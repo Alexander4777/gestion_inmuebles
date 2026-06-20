@@ -1,9 +1,15 @@
 import { RootRoute, Route } from '@tanstack/react-router';
 import { AppLayout } from '@/core/layout/AppLayout';
 import { DashboardPage } from '@/modulos/dashboard/DashboardPage';
+import { PropiedadesPage } from '@/modulos/propiedades/PropiedadesPage';
+import { PropiedadCrearPage } from '@/modulos/propiedades/PropiedadCrearPage';
+import { PropiedadDetallePage } from '@/modulos/propiedades/PropiedadDetallePage';
 import { RecibosPage } from '@/modulos/recibos/RecibosPage';
 import { ReciboCrearPage } from '@/modulos/recibos/ReciboCrearPage';
 import { ReciboDetallePage } from '@/modulos/recibos/ReciboDetallePage';
+import { ContratosPage } from '@/modulos/contratos/ContratosPage';
+import { ContratoCrearPage } from '@/modulos/contratos/ContratoCrearPage';
+import { ContratoDetallePage } from '@/modulos/contratos/ContratoDetallePage';
 import { LoginPage } from '@/modulos/auth/LoginPage';
 
 // ── Raíz ───────────────────────────────────────────────────────────────────────
@@ -36,7 +42,19 @@ const indexRoute = new Route({
 const propiedadesRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/propiedades',
-  component: () => <div>Propiedades</div>,
+  component: PropiedadesPage,
+});
+
+const propiedadCrearRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/propiedades/crear',
+  component: PropiedadCrearPage,
+});
+
+const propiedadDetalleRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/propiedades/$id',
+  component: PropiedadDetallePage,
 });
 
 const inquilinosRoute = new Route({
@@ -48,7 +66,19 @@ const inquilinosRoute = new Route({
 const contratosRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/contratos',
-  component: () => <div>Contratos</div>,
+  component: ContratosPage,
+});
+
+const contratoCrearRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/contratos/crear',
+  component: ContratoCrearPage,
+});
+
+const contratoDetalleRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/contratos/$id',
+  component: ContratoDetallePage,
 });
 
 // ── Recibos ────────────────────────────────────────────────────────────────────
@@ -75,8 +105,12 @@ export const routeTree = rootRoute.addChildren([
   loginRoute,
   indexRoute,
   propiedadesRoute,
+  propiedadCrearRoute,
+  propiedadDetalleRoute,
   inquilinosRoute,
   contratosRoute,
+  contratoCrearRoute,
+  contratoDetalleRoute,
   recibosRoute,
   reciboCrearRoute,
   reciboDetalleRoute,
