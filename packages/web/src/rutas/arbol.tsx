@@ -16,6 +16,10 @@ import { ContratoDetallePage } from '@/modulos/contratos/ContratoDetallePage';
 import { MantenimientosPage } from '@/modulos/mantenimientos/MantenimientosPage';
 import { MantenimientoCrearPage } from '@/modulos/mantenimientos/MantenimientoCrearPage';
 import { MantenimientoDetallePage } from '@/modulos/mantenimientos/MantenimientoDetallePage';
+import { MovimientosPage } from '@/modulos/contabilidad/MovimientosPage';
+import { MovimientoCrearPage } from '@/modulos/contabilidad/MovimientoCrearPage';
+import { MovimientoDetallePage } from '@/modulos/contabilidad/MovimientoDetallePage';
+import { EstadoResultadosPage } from '@/modulos/contabilidad/EstadoResultadosPage';
 import { LoginPage } from '@/modulos/auth/LoginPage';
 
 // ── Raíz ───────────────────────────────────────────────────────────────────────
@@ -137,6 +141,31 @@ const mantenimientoDetalleRoute = new Route({
   component: MantenimientoDetallePage,
 });
 
+// ── Contabilidad ───────────────────────────────────────────────────────────────
+const contabilidadRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/contabilidad',
+  component: MovimientosPage,
+});
+
+const contabilidadCrearRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/contabilidad/movimientos/crear',
+  component: MovimientoCrearPage,
+});
+
+const contabilidadDetalleRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/contabilidad/movimientos/$id',
+  component: MovimientoDetallePage,
+});
+
+const estadoResultadosRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/contabilidad/estado-resultados',
+  component: EstadoResultadosPage,
+});
+
 // ── Árbol ──────────────────────────────────────────────────────────────────────
 export const routeTree = rootRoute.addChildren([
   loginRoute,
@@ -156,4 +185,8 @@ export const routeTree = rootRoute.addChildren([
   mantenimientosRoute,
   mantenimientoCrearRoute,
   mantenimientoDetalleRoute,
+  contabilidadRoute,
+  contabilidadCrearRoute,
+  contabilidadDetalleRoute,
+  estadoResultadosRoute,
 ]);
