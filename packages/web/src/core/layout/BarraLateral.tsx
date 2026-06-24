@@ -5,8 +5,8 @@ import {
   Users,
   FileText,
   Receipt,
+  Wrench,
   // Se activarán en fases posteriores:
-  // Wrench,
   // Calculator,
   // FileSpreadsheet,
 } from 'lucide-react';
@@ -18,9 +18,9 @@ const enlaces = [
   { to: '/inquilinos', etiqueta: 'Inquilinos', icono: Users },
   { to: '/contratos', etiqueta: 'Contratos', icono: FileText },
   { to: '/recibos', etiqueta: 'Recibos', icono: Receipt },
+  { to: '/mantenimientos', etiqueta: 'Mantenimiento', icono: Wrench },
   // Placeholders para siguientes fases
   // { to: '/facturacion', etiqueta: 'Facturación', icono: FileSpreadsheet },
-  // { to: '/mantenimiento', etiqueta: 'Mantenimiento', icono: Wrench },
   // { to: '/contabilidad', etiqueta: 'Contabilidad', icono: Calculator },
 ];
 

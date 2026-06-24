@@ -5,6 +5,7 @@ import { propiedadesRouter } from '../modulos/propiedades/propiedades.router';
 import { inquilinosRouter } from '../modulos/inquilinos/inquilinos.router';
 import { contratosRouter } from '../modulos/contratos/contratos.router';
 import { recibosRouter } from '../modulos/recibos/recibos.router';
+import { mantenimientosRouter } from '../modulos/mantenimientos/mantenimientos.router';
 
 export function crearApp() {
   const app = express();
@@ -24,6 +25,7 @@ export function crearApp() {
   app.use('/api/inquilinos', inquilinosRouter);
   app.use('/api/contratos', contratosRouter);
   app.use('/api/recibos', recibosRouter);
+  app.use('/api/mantenimientos', mantenimientosRouter);
 
   return app;
 }

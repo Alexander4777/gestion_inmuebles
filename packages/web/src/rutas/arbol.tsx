@@ -13,6 +13,9 @@ import { ReciboDetallePage } from '@/modulos/recibos/ReciboDetallePage';
 import { ContratosPage } from '@/modulos/contratos/ContratosPage';
 import { ContratoCrearPage } from '@/modulos/contratos/ContratoCrearPage';
 import { ContratoDetallePage } from '@/modulos/contratos/ContratoDetallePage';
+import { MantenimientosPage } from '@/modulos/mantenimientos/MantenimientosPage';
+import { MantenimientoCrearPage } from '@/modulos/mantenimientos/MantenimientoCrearPage';
+import { MantenimientoDetallePage } from '@/modulos/mantenimientos/MantenimientoDetallePage';
 import { LoginPage } from '@/modulos/auth/LoginPage';
 
 // ── Raíz ───────────────────────────────────────────────────────────────────────
@@ -115,6 +118,25 @@ const reciboDetalleRoute = new Route({
   component: ReciboDetallePage,
 });
 
+// ── Mantenimiento ──────────────────────────────────────────────────────────────
+const mantenimientosRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/mantenimientos',
+  component: MantenimientosPage,
+});
+
+const mantenimientoCrearRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/mantenimientos/crear',
+  component: MantenimientoCrearPage,
+});
+
+const mantenimientoDetalleRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/mantenimientos/$id',
+  component: MantenimientoDetallePage,
+});
+
 // ── Árbol ──────────────────────────────────────────────────────────────────────
 export const routeTree = rootRoute.addChildren([
   loginRoute,
@@ -131,4 +153,7 @@ export const routeTree = rootRoute.addChildren([
   recibosRoute,
   reciboCrearRoute,
   reciboDetalleRoute,
+  mantenimientosRoute,
+  mantenimientoCrearRoute,
+  mantenimientoDetalleRoute,
 ]);
