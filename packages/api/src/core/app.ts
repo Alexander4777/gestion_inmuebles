@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { authRouter } from '../modulos/auth/auth.router';
 import { propiedadesRouter } from '../modulos/propiedades/propiedades.router';
+import { inquilinosRouter } from '../modulos/inquilinos/inquilinos.router';
 import { contratosRouter } from '../modulos/contratos/contratos.router';
 import { recibosRouter } from '../modulos/recibos/recibos.router';
 
@@ -20,9 +21,9 @@ export function crearApp() {
   // ── Módulos ──────────────────────────────────────────────────────────────────
   app.use('/api/auth', authRouter);
   app.use('/api/propiedades', propiedadesRouter);
+  app.use('/api/inquilinos', inquilinosRouter);
   app.use('/api/contratos', contratosRouter);
   app.use('/api/recibos', recibosRouter);
-  // Próximos: app.use('/api/inquilinos', inquilinosRouter);
 
   return app;
 }

@@ -3,7 +3,6 @@ import { useNavigate } from '@tanstack/react-router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft } from 'lucide-react';
 import { propiedadesAPI, type PropiedadEntrada } from '@/services/propiedades.api';
-import type { PropiedadTipo } from '@proyecto-modular/shared/tipos/propiedades';
 
 export function PropiedadCrearPage() {
   const navigate = useNavigate();

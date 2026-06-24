@@ -1,6 +1,6 @@
 import { useParams, Link } from '@tanstack/react-router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ArrowLeft, CheckCircle2, XCircle, Ban } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Ban } from 'lucide-react';
 import { contratosAPI } from '@/services/contratos.api';
 import { cn } from '@/core/ui/cn';
 import type { EstatusContrato } from '@proyecto-modular/shared/tipos/contratos';

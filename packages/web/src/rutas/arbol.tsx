@@ -4,6 +4,9 @@ import { DashboardPage } from '@/modulos/dashboard/DashboardPage';
 import { PropiedadesPage } from '@/modulos/propiedades/PropiedadesPage';
 import { PropiedadCrearPage } from '@/modulos/propiedades/PropiedadCrearPage';
 import { PropiedadDetallePage } from '@/modulos/propiedades/PropiedadDetallePage';
+import { InquilinosPage } from '@/modulos/inquilinos/InquilinosPage';
+import { InquilinoCrearPage } from '@/modulos/inquilinos/InquilinoCrearPage';
+import { InquilinoDetallePage } from '@/modulos/inquilinos/InquilinoDetallePage';
 import { RecibosPage } from '@/modulos/recibos/RecibosPage';
 import { ReciboCrearPage } from '@/modulos/recibos/ReciboCrearPage';
 import { ReciboDetallePage } from '@/modulos/recibos/ReciboDetallePage';
@@ -60,7 +63,19 @@ const propiedadDetalleRoute = new Route({
 const inquilinosRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/inquilinos',
-  component: () => <div>Inquilinos</div>,
+  component: InquilinosPage,
+});
+
+const inquilinoCrearRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/inquilinos/crear',
+  component: InquilinoCrearPage,
+});
+
+const inquilinoDetalleRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/inquilinos/$id',
+  component: InquilinoDetallePage,
 });
 
 const contratosRoute = new Route({
@@ -108,6 +123,8 @@ export const routeTree = rootRoute.addChildren([
   propiedadCrearRoute,
   propiedadDetalleRoute,
   inquilinosRoute,
+  inquilinoCrearRoute,
+  inquilinoDetalleRoute,
   contratosRoute,
   contratoCrearRoute,
   contratoDetalleRoute,

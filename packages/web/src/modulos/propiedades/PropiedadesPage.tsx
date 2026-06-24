@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { Plus, Search, Eye, Building2 } from 'lucide-react';
 import { propiedadesAPI } from '@/services/propiedades.api';
@@ -23,7 +23,6 @@ const TIPO_COLORES: Record<PropiedadTipo, string> = {
 };
 
 export function PropiedadesPage() {
-  const queryClient = useQueryClient();
   const [filtroActiva, setFiltroActiva] = useState<'all' | 'active' | 'inactive'>('active');
   const [busqueda, setBusqueda] = useState('');
 
@@ -33,11 +32,6 @@ export function PropiedadesPage() {
       propiedadesAPI.listar(
         filtroActiva === 'all' ? undefined : { activa: filtroActiva === 'active' },
       ),
-  });
-
-  const eliminarMutation = useMutation({
-    mutationFn: propiedadesAPI.eliminar,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['propiedades'] }),
   });
 
   const filtrados = useMemo(() => {
