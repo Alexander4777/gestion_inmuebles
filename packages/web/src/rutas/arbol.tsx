@@ -20,6 +20,9 @@ import { MovimientosPage } from '@/modulos/contabilidad/MovimientosPage';
 import { MovimientoCrearPage } from '@/modulos/contabilidad/MovimientoCrearPage';
 import { MovimientoDetallePage } from '@/modulos/contabilidad/MovimientoDetallePage';
 import { EstadoResultadosPage } from '@/modulos/contabilidad/EstadoResultadosPage';
+import { FacturasPage } from '@/modulos/facturacion/FacturasPage';
+import { FacturaCrearPage } from '@/modulos/facturacion/FacturaCrearPage';
+import { FacturaDetallePage } from '@/modulos/facturacion/FacturaDetallePage';
 import { LoginPage } from '@/modulos/auth/LoginPage';
 
 // ── Raíz ───────────────────────────────────────────────────────────────────────
@@ -166,6 +169,25 @@ const estadoResultadosRoute = new Route({
   component: EstadoResultadosPage,
 });
 
+// ── Facturación ────────────────────────────────────────────────────────────────
+const facturacionRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/facturacion',
+  component: FacturasPage,
+});
+
+const facturacionCrearRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/facturacion/crear',
+  component: FacturaCrearPage,
+});
+
+const facturacionDetalleRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/facturacion/$id',
+  component: FacturaDetallePage,
+});
+
 // ── Árbol ──────────────────────────────────────────────────────────────────────
 export const routeTree = rootRoute.addChildren([
   loginRoute,
@@ -189,4 +211,7 @@ export const routeTree = rootRoute.addChildren([
   contabilidadCrearRoute,
   contabilidadDetalleRoute,
   estadoResultadosRoute,
+  facturacionRoute,
+  facturacionCrearRoute,
+  facturacionDetalleRoute,
 ]);

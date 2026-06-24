@@ -7,6 +7,7 @@ import { contratosRouter } from '../modulos/contratos/contratos.router';
 import { recibosRouter } from '../modulos/recibos/recibos.router';
 import { mantenimientosRouter } from '../modulos/mantenimientos/mantenimientos.router';
 import { movimientosRouter } from '../modulos/movimientos/movimientos.router';
+import { facturacionRouter } from '../modulos/facturacion/facturacion.router';
 
 export function crearApp() {
   const app = express();
@@ -28,6 +29,7 @@ export function crearApp() {
   app.use('/api/recibos', recibosRouter);
   app.use('/api/mantenimientos', mantenimientosRouter);
   app.use('/api/movimientos', movimientosRouter);
+  app.use('/api/facturas', facturacionRouter);
 
   return app;
 }

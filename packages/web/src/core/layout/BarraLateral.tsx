@@ -7,8 +7,7 @@ import {
   Receipt,
   Wrench,
   Calculator,
-  // Se activarán en fases posteriores:
-  // FileSpreadsheet,
+  FileSpreadsheet,
 } from 'lucide-react';
 import { cn } from '@/core/ui/cn';
 
@@ -20,8 +19,7 @@ const enlaces = [
   { to: '/recibos', etiqueta: 'Recibos', icono: Receipt },
   { to: '/mantenimientos', etiqueta: 'Mantenimiento', icono: Wrench },
   { to: '/contabilidad', etiqueta: 'Contabilidad', icono: Calculator },
-  // Placeholders para siguientes fases
-  // { to: '/facturacion', etiqueta: 'Facturación', icono: FileSpreadsheet },
+  { to: '/facturacion', etiqueta: 'Facturación', icono: FileSpreadsheet },
 ];
 
 export function BarraLateral() {
