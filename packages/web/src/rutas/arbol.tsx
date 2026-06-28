@@ -24,6 +24,7 @@ import { FacturasPage } from '@/modulos/facturacion/FacturasPage';
 import { FacturaCrearPage } from '@/modulos/facturacion/FacturaCrearPage';
 import { FacturaDetallePage } from '@/modulos/facturacion/FacturaDetallePage';
 import { LoginPage } from '@/modulos/auth/LoginPage';
+import { InteligenciaPage } from '@/modulos/inteligencia/InteligenciaPage';
 
 // ── Raíz ───────────────────────────────────────────────────────────────────────
 const rootRoute = new RootRoute({
@@ -188,6 +189,13 @@ const facturacionDetalleRoute = new Route({
   component: FacturaDetallePage,
 });
 
+// ── Inteligencia IA ───────────────────────────────────────────────────────────
+const inteligenciaRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/inteligencia',
+  component: InteligenciaPage,
+});
+
 // ── Árbol ──────────────────────────────────────────────────────────────────────
 export const routeTree = rootRoute.addChildren([
   loginRoute,
@@ -214,4 +222,5 @@ export const routeTree = rootRoute.addChildren([
   facturacionRoute,
   facturacionCrearRoute,
   facturacionDetalleRoute,
+  inteligenciaRoute,
 ]);

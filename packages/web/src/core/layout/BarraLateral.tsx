@@ -8,6 +8,7 @@ import {
   Wrench,
   Calculator,
   FileSpreadsheet,
+  Sparkles,
 } from 'lucide-react';
 import { cn } from '@/core/ui/cn';
 
@@ -20,6 +21,7 @@ const enlaces = [
   { to: '/mantenimientos', etiqueta: 'Mantenimiento', icono: Wrench },
   { to: '/contabilidad', etiqueta: 'Contabilidad', icono: Calculator },
   { to: '/facturacion', etiqueta: 'Facturación', icono: FileSpreadsheet },
+  { to: '/inteligencia', etiqueta: 'Inteligencia IA', icono: Sparkles },
 ];
 
 export function BarraLateral() {
