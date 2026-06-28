@@ -7,6 +7,7 @@ import {
   date,
   boolean,
   timestamp,
+  jsonb,
   pgEnum,
 } from 'drizzle-orm/pg-core';
 
@@ -190,4 +191,17 @@ export const movimientosContables = pgTable('movimientos_contables', {
     .notNull()
     .defaultNow()
     .$onUpdate(() => new Date()),
+});
+
+// ── IA: Predicciones ────────────────────────────────────────────────────────────
+export const predicciones = pgTable('predicciones', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  tipo: varchar('tipo', { length: 30 }).notNull(),
+  objetivoTipo: varchar('objetivo_tipo', { length: 30 }).notNull(),
+  objetivoId: uuid('objetivo_id').notNull(),
+  probabilidad: numeric('probabilidad', { precision: 5, scale: 4 }),
+  valorEstimado: numeric('valor_estimado', { precision: 12, scale: 2 }),
+  featureImportance: jsonb('feature_importance'),
+  modeloVersion: varchar('modelo_version', { length: 20 }).notNull(),
+  calculadaEn: timestamp('calculada_en').notNull().defaultNow(),
 });

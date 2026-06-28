@@ -8,6 +8,7 @@ import { recibosRouter } from '../modulos/recibos/recibos.router';
 import { mantenimientosRouter } from '../modulos/mantenimientos/mantenimientos.router';
 import { movimientosRouter } from '../modulos/movimientos/movimientos.router';
 import { facturacionRouter } from '../modulos/facturacion/facturacion.router';
+import { inteligenciaRouter } from '../modulos/inteligencia/inteligencia.router';
 
 export function crearApp() {
   const app = express();
@@ -30,6 +31,7 @@ export function crearApp() {
   app.use('/api/mantenimientos', mantenimientosRouter);
   app.use('/api/movimientos', movimientosRouter);
   app.use('/api/facturas', facturacionRouter);
+  app.use('/api/ia', inteligenciaRouter);
 
   return app;
 }

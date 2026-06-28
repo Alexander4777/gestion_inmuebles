@@ -42,3 +42,6 @@ coverage/
 *.sqlite
 migrations/*.js
 migrations/*.map
+
+# AI / ML — modelos serializados (artefactos generados por entrenamiento)
+packages/api/data/
