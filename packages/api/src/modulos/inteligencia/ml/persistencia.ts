@@ -12,9 +12,15 @@
 
 import { promises as fs } from 'fs';
 import * as path from 'path';
+import { fileURLToPath } from 'url';
 import type { ModeloLogistico } from './logreg';
 import type { ModeloLineal } from './linear';
 
+// En ESM no hay __dirname. Lo derivamos desde import.meta.url.
+// Este archivo vive en: packages/api/src/modulos/inteligencia/ml/persistencia.ts
+// El directorio de modelos debe estar en: packages/api/data/modelos (raíz del paquete)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const RUTA_BASE = path.resolve(__dirname, '../../../../data/modelos');
 
 export type TipoModelo = 'logistico' | 'lineal';
