@@ -3,6 +3,8 @@ import { useNavigate } from '@tanstack/react-router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft } from 'lucide-react';
 import { contratosAPI } from '@/services/contratos.api';
+import { usePropiedadesParaSelecto, useInquilinosParaSelecto } from '@/services/hooks';
+import { Selector } from '@/core/ui/Selector';
 import type { ContratoEntrada } from '@proyecto-modular/shared/esquemas/contratos';
 import type { PeriodicidadPago } from '@proyecto-modular/shared/tipos/contratos';
 
@@ -21,6 +23,9 @@ export function ContratoCrearPage() {
   });
 
   const [error, setError] = useState('');
+
+  const { opciones: opcionesProp, isLoading: cargandoProp } = usePropiedadesParaSelecto();
+  const { opciones: opcionesInq, isLoading: cargandoInq } = useInquilinosParaSelecto();
 
   const crearMutation = useMutation({
     mutationFn: contratosAPI.crear,
@@ -77,31 +82,25 @@ export function ContratoCrearPage() {
           <h3 className="text-lg font-semibold">Vinculación</h3>
 
           <div className="grid grid-cols-1 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-1.5">ID de la Propiedad</label>
-              <input
-                type="text"
-                name="propiedadId"
-                value={formData.propiedadId}
-                onChange={handleChange}
-                placeholder="UUID de la propiedad"
-                required
-                className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-              />
-            </div>
+            <Selector
+              etiqueta="Propiedad"
+              value={formData.propiedadId}
+              onChange={(v) => setFormData((prev) => ({ ...prev, propiedadId: v }))}
+              opciones={opcionesProp}
+              isLoading={cargandoProp}
+              placeholder="Selecciona una propiedad…"
+              mensajeVacio="No hay propiedades activas. Crea una primero."
+            />
 
-            <div>
-              <label className="block text-sm font-medium mb-1.5">ID del Inquilino</label>
-              <input
-                type="text"
-                name="inquilinoId"
-                value={formData.inquilinoId}
-                onChange={handleChange}
-                placeholder="UUID del inquilino"
-                required
-                className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-              />
-            </div>
+            <Selector
+              etiqueta="Inquilino"
+              value={formData.inquilinoId}
+              onChange={(v) => setFormData((prev) => ({ ...prev, inquilinoId: v }))}
+              opciones={opcionesInq}
+              isLoading={cargandoInq}
+              placeholder="Selecciona un inquilino…"
+              mensajeVacio="No hay inquilinos activos. Crea uno primero."
+            />
           </div>
 
           <h3 className="text-lg font-semibold pt-2">Periodo</h3>

@@ -3,6 +3,8 @@ import { useNavigate } from '@tanstack/react-router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft } from 'lucide-react';
 import { movimientosAPI } from '@/services/movimientos.api';
+import { usePropiedadesParaSelecto, useContratosParaSelecto, useFacturasParaSelecto } from '@/services/hooks';
+import { Selector } from '@/core/ui/Selector';
 import type { MovimientoEntrada } from '@proyecto-modular/shared/esquemas/contabilidad';
 import type {
   TipoMovimiento,
@@ -46,6 +48,12 @@ export function MovimientoCrearPage() {
     facturaId: undefined,
   });
   const [error, setError] = useState('');
+
+  const { opciones: opcionesProp, isLoading: cargandoProp } = usePropiedadesParaSelecto();
+  const { opciones: opcionesContratos, isLoading: cargandoContratos } =
+    useContratosParaSelecto();
+  const { opciones: opcionesFacturas, isLoading: cargandoFacturas } =
+    useFacturasParaSelecto();
 
   const crearMutation = useMutation({
     mutationFn: movimientosAPI.crear,
@@ -204,48 +212,36 @@ export function MovimientoCrearPage() {
           {/* Referencias opcionales */}
           <details className="rounded-lg border border-border bg-secondary/30 p-4">
             <summary className="text-sm font-medium cursor-pointer">
-              Referencias opcionales (UUIDs)
+              Referencias opcionales
             </summary>
             <div className="space-y-3 mt-3">
-              <div>
-                <label className="block text-xs font-medium mb-1 text-muted-foreground">
-                  ID Propiedad
-                </label>
-                <input
-                  type="text"
-                  name="propiedadId"
-                  value={form.propiedadId ?? ''}
-                  onChange={handleChange}
-                  placeholder="UUID"
-                  className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-medium mb-1 text-muted-foreground">
-                  ID Contrato
-                </label>
-                <input
-                  type="text"
-                  name="contratoId"
-                  value={form.contratoId ?? ''}
-                  onChange={handleChange}
-                  placeholder="UUID"
-                  className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-medium mb-1 text-muted-foreground">
-                  ID Factura
-                </label>
-                <input
-                  type="text"
-                  name="facturaId"
-                  value={form.facturaId ?? ''}
-                  onChange={handleChange}
-                  placeholder="UUID"
-                  className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-                />
-              </div>
+              <Selector
+                etiqueta="Propiedad"
+                value={form.propiedadId ?? ''}
+                onChange={(v) => setForm((prev) => ({ ...prev, propiedadId: v || undefined }))}
+                opciones={opcionesProp}
+                isLoading={cargandoProp}
+                placeholder="(ninguna)"
+                requerido={false}
+              />
+              <Selector
+                etiqueta="Contrato"
+                value={form.contratoId ?? ''}
+                onChange={(v) => setForm((prev) => ({ ...prev, contratoId: v || undefined }))}
+                opciones={opcionesContratos}
+                isLoading={cargandoContratos}
+                placeholder="(ninguno)"
+                requerido={false}
+              />
+              <Selector
+                etiqueta="Factura"
+                value={form.facturaId ?? ''}
+                onChange={(v) => setForm((prev) => ({ ...prev, facturaId: v || undefined }))}
+                opciones={opcionesFacturas}
+                isLoading={cargandoFacturas}
+                placeholder="(ninguna)"
+                requerido={false}
+              />
             </div>
           </details>
         </div>

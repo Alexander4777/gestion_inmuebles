@@ -3,6 +3,8 @@ import { useNavigate } from '@tanstack/react-router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, Plus, Trash2 } from 'lucide-react';
 import { recibosAPI } from '@/services/recibos.api';
+import { useContratosParaSelecto } from '@/services/hooks';
+import { Selector } from '@/core/ui/Selector';
 import type { ReciboEntrada } from '@proyecto-modular/shared/esquemas/recibos';
 
 export function ReciboCrearPage() {
@@ -20,6 +22,9 @@ export function ReciboCrearPage() {
 
   const [desglose, setDesglose] = useState<{ descripcion: string; monto: string }[]>([]);
   const [error, setError] = useState('');
+
+  const { opciones: opcionesContratos, isLoading: cargandoContratos } =
+    useContratosParaSelecto();
 
   const crearMutation = useMutation({
     mutationFn: recibosAPI.crear,
@@ -79,18 +84,15 @@ export function ReciboCrearPage() {
           <h3 className="text-lg font-semibold">Datos del recibo</h3>
 
           <div className="grid grid-cols-1 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-1.5">ID del Contrato</label>
-              <input
-                type="text"
-                name="contratoId"
-                value={formData.contratoId}
-                onChange={handleChange}
-                placeholder="UUID del contrato"
-                required
-                className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-              />
-            </div>
+            <Selector
+              etiqueta="Contrato"
+              value={formData.contratoId}
+              onChange={(v) => setFormData((prev) => ({ ...prev, contratoId: v }))}
+              opciones={opcionesContratos}
+              isLoading={cargandoContratos}
+              placeholder="Selecciona un contrato…"
+              mensajeVacio="No hay contratos registrados."
+            />
 
             <div className="grid grid-cols-2 gap-4">
               <div>

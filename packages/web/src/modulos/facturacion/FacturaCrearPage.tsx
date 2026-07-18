@@ -3,6 +3,8 @@ import { useNavigate } from '@tanstack/react-router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, FileSpreadsheet } from 'lucide-react';
 import { facturacionAPI } from '@/services/facturacion.api';
+import { useRecibosParaSelecto } from '@/services/hooks';
+import { Selector } from '@/core/ui/Selector';
 import type { FacturaEntrada } from '@proyecto-modular/shared/esquemas/facturacion';
 import type { UsoCFDI } from '@proyecto-modular/shared/tipos/facturacion';
 import { cn } from '@/core/ui/cn';
@@ -22,6 +24,9 @@ export function FacturaCrearPage() {
     usoCFDI: 'D10',
   });
   const [error, setError] = useState('');
+
+  const { opciones: opcionesRecibos, isLoading: cargandoRecibos } =
+    useRecibosParaSelecto(true);
 
   const crearMutation = useMutation({
     mutationFn: facturacionAPI.crear,
@@ -68,21 +73,18 @@ export function FacturaCrearPage() {
         )}
 
         <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1.5">ID del Recibo</label>
-            <input
-              type="text"
-              name="reciboId"
-              value={form.reciboId}
-              onChange={handleChange}
-              placeholder="UUID del recibo a facturar"
-              required
-              className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-            />
-            <p className="text-xs text-muted-foreground mt-1">
-              El recibo debe existir y no tener ya una factura asociada.
-            </p>
-          </div>
+          <Selector
+            etiqueta="Recibo a facturar"
+            value={form.reciboId}
+            onChange={(v) => setForm({ ...form, reciboId: v })}
+            opciones={opcionesRecibos}
+            isLoading={cargandoRecibos}
+            placeholder="Selecciona un recibo pendiente…"
+            mensajeVacio="No hay recibos pendientes de facturar."
+          />
+          <p className="text-xs text-muted-foreground -mt-2">
+            El recibo debe existir y no tener ya una factura asociada.
+          </p>
 
           <div>
             <label className="block text-sm font-medium mb-2">Uso CFDI</label>

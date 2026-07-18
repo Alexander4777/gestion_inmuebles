@@ -3,6 +3,8 @@ import { useNavigate } from '@tanstack/react-router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft } from 'lucide-react';
 import { mantenimientosAPI } from '@/services/mantenimientos.api';
+import { usePropiedadesParaSelecto } from '@/services/hooks';
+import { Selector } from '@/core/ui/Selector';
 import type { MantenimientoEntrada } from '@proyecto-modular/shared/esquemas/mantenimiento';
 import type { CategoriaMantenimiento } from '@proyecto-modular/shared/tipos/mantenimiento';
 
@@ -28,6 +30,8 @@ export function MantenimientoCrearPage() {
   });
 
   const [error, setError] = useState('');
+
+  const { opciones: opcionesProp, isLoading: cargandoProp } = usePropiedadesParaSelecto();
 
   const crearMutation = useMutation({
     mutationFn: mantenimientosAPI.crear,
@@ -79,18 +83,15 @@ export function MantenimientoCrearPage() {
         )}
 
         <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1.5">ID de la Propiedad</label>
-            <input
-              type="text"
-              name="propiedadId"
-              value={form.propiedadId}
-              onChange={handleChange}
-              placeholder="UUID de la propiedad"
-              required
-              className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-            />
-          </div>
+          <Selector
+            etiqueta="Propiedad"
+            value={form.propiedadId}
+            onChange={(v) => setForm({ ...form, propiedadId: v })}
+            opciones={opcionesProp}
+            isLoading={cargandoProp}
+            placeholder="Selecciona una propiedad…"
+            mensajeVacio="No hay propiedades activas. Crea una primero."
+          />
 
           <div>
             <label className="block text-sm font-medium mb-1.5">Categoría</label>
