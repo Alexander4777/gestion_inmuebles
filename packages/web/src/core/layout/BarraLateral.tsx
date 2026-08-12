@@ -9,6 +9,7 @@ import {
   Calculator,
   FileSpreadsheet,
   Sparkles,
+  LogOut,
 } from 'lucide-react';
 import { cn } from '@/core/ui/cn';
 
@@ -26,6 +27,13 @@ const enlaces = [
 
 export function BarraLateral() {
   const location = useLocation();
+
+  function handleLogout() {
+    localStorage.removeItem('token');
+    // Forzar recarga completa para que cualquier cache (TanStack Query, etc.)
+    // se limpie y el beforeLoad del RootRoute redirija a /login.
+    window.location.href = '/login';
+  }
 
   return (
     <aside className="w-64 border-r border-border bg-secondary/30 flex flex-col">
@@ -57,8 +65,22 @@ export function BarraLateral() {
         })}
       </nav>
 
-      <div className="p-4 border-t border-border text-xs text-muted-foreground">
-        v0.0.0 — Desarrollo
+      <div className="p-4 border-t border-border flex items-center justify-between gap-2">
+        <span className="text-xs text-muted-foreground truncate">v0.0.0 — Desarrollo</span>
+        <button
+          type="button"
+          onClick={handleLogout}
+          aria-label="Cerrar sesión"
+          title="Cerrar sesión"
+          className={cn(
+            'inline-flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-md',
+            'text-xs font-medium text-muted-foreground',
+            'hover:bg-red-50 hover:text-red-700 transition-colors',
+          )}
+        >
+          <LogOut size={14} />
+          Salir
+        </button>
       </div>
     </aside>
   );
