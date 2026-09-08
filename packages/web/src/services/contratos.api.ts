@@ -1,5 +1,6 @@
 import type { Contrato, EstatusContrato } from '@proyecto-modular/shared/tipos/contratos';
 import type { ContratoEntrada } from '@proyecto-modular/shared/esquemas/contratos';
+import { descargarPDF } from './descargas';
 
 const BASE = '/api/contratos';
 
@@ -45,5 +46,10 @@ export const contratosAPI = {
 
   eliminar(id: string): Promise<void> {
     return fetchJSON(`${BASE}/${id}`, { method: 'DELETE' });
+  },
+
+  /** Descarga el PDF del contrato (genera y abre diálogo de descarga). */
+  descargarPDF(id: string): Promise<void> {
+    return descargarPDF(`${BASE}/${id}/pdf`);
   },
 };

@@ -16,7 +16,19 @@
       "Bash(git -C /home/alex/proyecto_modular status)",
       "Bash(git -C /home/alex/proyecto_modular add -A)",
       "Bash(git -C /home/alex/proyecto_modular diff --cached --stat)",
-      "Bash(git -C /home/alex/proyecto_modular commit -m 'feat: esqueleto inicial del proyecto modular *)"
+      "Bash(git -C /home/alex/proyecto_modular commit -m 'feat: esqueleto inicial del proyecto modular *)",
+      "Bash(npx vitest *)",
+      "Bash(cat > *)",
+      "Bash(echo \"EXIT: $?\")",
+      "Bash(pdftotext -v)",
+      "Bash(PGPASSWORD=postgres psql -h localhost -U postgres -d proyecto_modular -c \"SELECT id, \\\\\"numeroRecibo\\\\\" FROM recibos LIMIT 3;\")",
+      "Bash(PGPASSWORD=postgres psql -h localhost -U postgres -d proyecto_modular -c \"SELECT id, numero_recibo FROM recibos LIMIT 3;\")",
+      "Bash(PGPASSWORD=postgres psql -h localhost -U postgres -d proyecto_modular -c \"SELECT id FROM contratos LIMIT 3;\")",
+      "Bash(curl -s http://localhost:3001/api/health)",
+      "Bash(pdftotext /tmp/contrato.pdf -)"
+    ],
+    "additionalDirectories": [
+      "/tmp"
     ]
   }
 }

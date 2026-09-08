@@ -1,6 +1,7 @@
 import { useParams, Link } from '@tanstack/react-router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ArrowLeft, CheckCircle2, XCircle } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, XCircle, Printer } from 'lucide-react';
+import { useState } from 'react';
 import { recibosAPI } from '@/services/recibos.api';
 import { cn } from '@/core/ui/cn';
 
@@ -27,6 +28,7 @@ function formatearFecha(fecha: string): string {
 export function ReciboDetallePage() {
   const { id } = useParams({ strict: false }) as { id: string };
   const queryClient = useQueryClient();
+  const [imprimiendo, setImprimiendo] = useState(false);
 
   const { data: recibo, isLoading, error } = useQuery({
     queryKey: ['recibos', id],
@@ -42,6 +44,18 @@ export function ReciboDetallePage() {
     mutationFn: () => recibosAPI.actualizar(id, { estatus: 'cancelado' }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['recibos'] }),
   });
+
+  const handleImprimir = async () => {
+    setImprimiendo(true);
+    try {
+      await recibosAPI.descargarPDF(id);
+    } catch (err) {
+      const mensaje = err instanceof Error ? err.message : 'No se pudo generar el PDF';
+      alert(mensaje);
+    } finally {
+      setImprimiendo(false);
+    }
+  };
 
   if (isLoading) return <p className="text-muted-foreground">Cargando recibo…</p>;
   if (error || !recibo)
@@ -77,6 +91,14 @@ export function ReciboDetallePage() {
           </div>
           <p className="text-sm text-muted-foreground mt-1">Detalle del recibo</p>
         </div>
+        <button
+          onClick={handleImprimir}
+          disabled={imprimiendo}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-card text-sm font-medium hover:bg-secondary transition-colors disabled:opacity-50"
+        >
+          <Printer size={18} />
+          {imprimiendo ? 'Generando PDF…' : 'Imprimir recibo'}
+        </button>
       </div>
 
       {/* ── Resumen financiero ────────────────────────────────────────────────── */}

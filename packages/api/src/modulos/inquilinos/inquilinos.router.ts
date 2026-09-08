@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import { z } from 'zod';
 import { inquilinoEsquema } from '@proyecto-modular/shared/esquemas/inquilinos';
-import { requerirAuth } from '../../core/auth';
+import { establecerPasswordEsquema } from '@proyecto-modular/shared/esquemas/auth';
+import { requerirAuth, requerirRol } from '../../core/auth';
 import { inquilinosService } from './inquilinos.service';
 
 export const inquilinosRouter = Router();
@@ -88,6 +89,30 @@ inquilinosRouter.delete('/:id', async (req, res) => {
     res.status(204).send();
   } catch (error) {
     console.error('Error al eliminar inquilino:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+// ── POST /:id/cuenta — Fijar contraseña del portal (solo admin) ──────────────────
+//
+// Hashea con bcrypt y guarda en inquilinos.passwordHash. Devuelve la contraseña
+// en texto plano una sola vez para que el admin la comunique al inquilino
+// por canal seguro. Llamadas subsecuentes sobrescriben el hash.
+inquilinosRouter.post('/:id/cuenta', requerirRol('admin'), async (req, res) => {
+  try {
+    const { password } = establecerPasswordEsquema.parse(req.body);
+    const ok = await inquilinosService.establecerPassword(String(req.params.id), password);
+    if (!ok) {
+      res.status(404).json({ error: 'Inquilino no encontrado' });
+      return;
+    }
+    res.status(200).json({ passwordPlano: password });
+  } catch (error: any) {
+    if (error?.name === 'ZodError') {
+      res.status(400).json({ error: 'Datos inválidos', detalles: error.errors });
+      return;
+    }
+    console.error('Error al establecer contraseña:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });

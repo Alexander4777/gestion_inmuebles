@@ -1,7 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from '@tanstack/react-router';
+import type { RolUsuario } from '@proyecto-modular/shared/tipos/auth';
 
 const API = '/api/auth/login';
+
+interface RespuestaLogin {
+  token: string;
+  rol: RolUsuario;
+  inquilinoId?: string;
+}
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -9,6 +16,7 @@ export function LoginPage() {
   useEffect(() => {
     if (localStorage.getItem('token')) navigate({ to: '/' });
   }, [navigate]);
+
   const [form, setForm] = useState({ usuario: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -30,13 +38,19 @@ export function LoginPage() {
       });
 
       if (!res.ok) {
-        const data = await res.json();
+        const data = await res.json().catch(() => ({}));
         throw new Error(data.error ?? 'Error de autenticación');
       }
 
-      const { token } = await res.json();
+      const { token, rol }: RespuestaLogin = await res.json();
       localStorage.setItem('token', token);
-      navigate({ to: '/' });
+
+      // El rol determina a dónde enviar al usuario.
+      if (rol === 'inquilino') {
+        navigate({ to: '/portal/mi-contrato' });
+      } else {
+        navigate({ to: '/' });
+      }
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -61,7 +75,7 @@ export function LoginPage() {
             )}
 
             <div>
-              <label className="block text-sm font-medium mb-1.5">Usuario</label>
+              <label className="block text-sm font-medium mb-1.5">Usuario o correo</label>
               <input
                 type="text"
                 name="usuario"
@@ -96,7 +110,8 @@ export function LoginPage() {
           </form>
 
           <p className="text-xs text-muted-foreground text-center mt-6">
-            Desarrollo: <code className="bg-secondary px-1 rounded">admin</code> / <code className="bg-secondary px-1 rounded">admin123</code>
+            Desarrollo admin: <code className="bg-secondary px-1 rounded">admin</code> /{' '}
+            <code className="bg-secondary px-1 rounded">admin123</code>
           </p>
         </div>
       </div>

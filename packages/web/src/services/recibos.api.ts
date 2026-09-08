@@ -1,5 +1,6 @@
 import type { Recibo, DetalleRecibo } from '@proyecto-modular/shared/tipos/recibos';
 import type { ReciboEntrada } from '@proyecto-modular/shared/esquemas/recibos';
+import { descargarPDF } from './descargas';
 
 const BASE = '/api/recibos';
 
@@ -50,5 +51,10 @@ export const recibosAPI = {
 
   eliminar(id: string): Promise<void> {
     return fetchJSON(`${BASE}/${id}`, { method: 'DELETE' });
+  },
+
+  /** Descarga el PDF del recibo (genera y abre diálogo de descarga). */
+  descargarPDF(id: string): Promise<void> {
+    return descargarPDF(`${BASE}/${id}/pdf`);
   },
 };

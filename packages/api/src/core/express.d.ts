@@ -1,7 +1,11 @@
-import type { TokenPayload } from './auth';
+import type { TokenPayload } from '@proyecto-modular/shared/tipos/auth';
 
-declare module 'express' {
-  interface Request {
-    usuario?: TokenPayload;
+declare global {
+  namespace Express {
+    interface Request {
+      usuario?: TokenPayload;
+    }
   }
 }
+
+export {};

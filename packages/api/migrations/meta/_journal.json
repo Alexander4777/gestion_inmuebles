@@ -15,6 +15,20 @@
       "when": 1782626027723,
       "tag": "0001_curvy_piledriver",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1786859679170,
+      "tag": "0002_right_young_avengers",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1788738959795,
+      "tag": "0003_chubby_giant_man",
+      "breakpoints": true
     }
   ]
 }

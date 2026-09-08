@@ -3,9 +3,16 @@ import { z } from 'zod';
 import { direccionEsquema } from '@proyecto-modular/shared/esquemas/propiedades';
 import { requerirAuth } from '../../core/auth';
 import { propiedadesService } from './propiedades.service';
+import { fotosRouter, fotoIndividualRouter } from './fotos.router';
 
 export const propiedadesRouter = Router();
 propiedadesRouter.use(requerirAuth);
+
+// ── Sub-routers de fotos ───────────────────────────────────────────────────────
+// Anidado bajo propiedad: GET /, POST /, PATCH /orden
+propiedadesRouter.use('/:id/fotos', fotosRouter);
+// A nivel de foto: DELETE /:fotoId, PATCH /:fotoId/portada
+propiedadesRouter.use('/fotos', fotoIndividualRouter);
 
 const propiedadCrearEsquema = direccionEsquema.extend({
   nombre: z.string().min(1, 'El nombre es requerido'),

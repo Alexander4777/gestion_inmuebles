@@ -5,6 +5,7 @@ import { Plus, Search, Eye, Building2 } from 'lucide-react';
 import { propiedadesAPI } from '@/services/propiedades.api';
 import { cn } from '@/core/ui/cn';
 import type { PropiedadTipo } from '@proyecto-modular/shared/tipos/propiedades';
+import { MiniaturaPropiedad } from './MiniaturaPropiedad';
 
 const TIPO_LABELS: Record<PropiedadTipo, string> = {
   casa: 'Casa',
@@ -109,45 +110,53 @@ export function PropiedadesPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {filtrados.map((p) => (
-                <tr key={p.id} className="hover:bg-secondary/20 transition-colors">
-                  <td className="px-4 py-3 font-medium">
-                    {p.nombre}
-                    {!p.activa && (
-                      <span className="ml-2 text-xs text-muted-foreground">(inactiva)</span>
-                    )}
-                  </td>
-                  <td className="px-4 py-3 text-muted-foreground text-xs">
-                    {p.direccion.calle} {p.direccion.numero}, {p.direccion.colonia}
-                    <br />
-                    <span className="text-xs">
-                      {p.direccion.ciudad}, {p.direccion.estado} — CP {p.direccion.codigoPostal}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-center">
-                    <span
-                      className={cn(
-                        'inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium border',
-                        TIPO_COLORES[p.tipo],
-                      )}
-                    >
-                      {TIPO_LABELS[p.tipo]}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center justify-center gap-1">
-                      <Link
-                        to={`/propiedades/$id`}
-                        params={{ id: p.id }}
-                        className="p-1.5 rounded-md hover:bg-secondary transition-colors text-muted-foreground hover:text-foreground"
-                        title="Ver detalle"
+              {filtrados.map((p) => {
+                const portada = p.fotos?.find((f) => f.esPortada);
+                return (
+                  <tr key={p.id} className="hover:bg-secondary/20 transition-colors">
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-3">
+                        <MiniaturaPropiedad fotoPortada={portada} />
+                        <span className="font-medium">
+                          {p.nombre}
+                          {!p.activa && (
+                            <span className="ml-2 text-xs text-muted-foreground">(inactiva)</span>
+                          )}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 text-muted-foreground text-xs">
+                      {p.direccion.calle} {p.direccion.numero}, {p.direccion.colonia}
+                      <br />
+                      <span className="text-xs">
+                        {p.direccion.ciudad}, {p.direccion.estado} — CP {p.direccion.codigoPostal}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 text-center">
+                      <span
+                        className={cn(
+                          'inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium border',
+                          TIPO_COLORES[p.tipo],
+                        )}
                       >
-                        <Eye size={15} />
-                      </Link>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                        {TIPO_LABELS[p.tipo]}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center justify-center gap-1">
+                        <Link
+                          to={`/propiedades/$id`}
+                          params={{ id: p.id }}
+                          className="p-1.5 rounded-md hover:bg-secondary transition-colors text-muted-foreground hover:text-foreground"
+                          title="Ver detalle"
+                        >
+                          <Eye size={15} />
+                        </Link>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

@@ -8,6 +8,13 @@ export const contratoEsquema = z.object({
   rentaMensual: z.number().positive('La renta debe ser mayor a 0'),
   deposito: z.number().min(0, 'El depósito no puede ser negativo'),
   periodicidadPago: z.enum(['mensual', 'bimestral', 'anual']),
+  // ── Campos opcionales con defaults (no rompen callers existentes) ──────────
+  diaPago: z.number().int().min(1).max(31).default(1),
+  incrementoAnualPct: z.number().min(0).max(100).default(5),
+  interesMoratorioPct: z.number().min(0).max(100).default(5),
+  penaConvencional: z.number().min(0).optional(),
+  lugarFirma: z.string().trim().min(1).optional(),
+  fechaFirma: z.string().date().optional(),
 });
 
 export type ContratoEntrada = z.infer<typeof contratoEsquema>;

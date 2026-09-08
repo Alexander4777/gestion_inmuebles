@@ -10,3 +10,10 @@ export const direccionEsquema = z.object({
 });
 
 export type DireccionEntrada = z.infer<typeof direccionEsquema>;
+
+/** Body de PATCH /api/propiedades/:id/fotos/orden */
+export const reordenarFotosEsquema = z.object({
+  ids: z.array(z.string().uuid()).min(1, 'Se requiere al menos un id'),
+});
+
+export type ReordenarFotosEntrada = z.infer<typeof reordenarFotosEsquema>;

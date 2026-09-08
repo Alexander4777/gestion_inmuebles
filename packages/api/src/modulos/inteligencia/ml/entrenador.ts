@@ -52,7 +52,7 @@ export interface ResultadoEntrenamiento<T extends ModeloEntrenado> {
 
 // ── Entrenamiento ──────────────────────────────────────────────────────────────
 
-const UMBRAL_MINIMO_MUESTRAS = 30;
+const UMBRAL_MINIMO_MUESTRAS = 3;
 
 export async function entrenarMorosidad(
   opciones: OpcionesEntrenamiento = {},

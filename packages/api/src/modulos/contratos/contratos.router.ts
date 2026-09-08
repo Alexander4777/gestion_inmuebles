@@ -3,6 +3,7 @@ import { contratoEsquema } from '@proyecto-modular/shared/esquemas/contratos';
 import { z } from 'zod';
 import { requerirAuth } from '../../core/auth';
 import { contratosService } from './contratos.service';
+import { generarPDFContrato } from './contratos.pdf';
 
 export const contratosRouter = Router();
 contratosRouter.use(requerirAuth);
@@ -40,6 +41,29 @@ contratosRouter.get('/:id', async (req, res) => {
   } catch (error) {
     console.error('Error al obtener contrato:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+// ── GET /:id/pdf — Descargar contrato en PDF ────────────────────────────────────
+contratosRouter.get('/:id/pdf', async (req, res) => {
+  try {
+    const contrato = await contratosService.obtenerPorId(req.params.id);
+    if (!contrato) {
+      res.status(404).json({ error: 'Contrato no encontrado' });
+      return;
+    }
+
+    const buffer = await generarPDFContrato(contrato);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="contrato-${contrato.id}.pdf"`,
+    );
+    res.setHeader('Content-Length', buffer.byteLength.toString());
+    res.send(buffer);
+  } catch (error) {
+    console.error('Error al generar PDF del contrato:', error);
+    res.status(500).json({ error: 'Error al generar el PDF' });
   }
 });
 

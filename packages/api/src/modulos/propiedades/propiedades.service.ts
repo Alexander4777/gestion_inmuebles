@@ -1,16 +1,20 @@
 import { db } from '../../core/db';
-import { propiedades } from '../../core/db/esquema';
-import { eq, and, desc, ilike } from 'drizzle-orm';
+import { propiedades, propiedadFotos } from '../../core/db/esquema';
+import { eq, and, asc, desc, ilike, inArray } from 'drizzle-orm';
 import type { DireccionEntrada } from '@proyecto-modular/shared/esquemas/propiedades';
-import type { Propiedad, PropiedadTipo } from '@proyecto-modular/shared/tipos/propiedades';
+import type { FotoPropiedad, Propiedad, PropiedadTipo } from '@proyecto-modular/shared/tipos/propiedades';
+import { fotosService, mapearFotoInterno } from './fotos.service';
 
 type PropiedadRow = typeof propiedades.$inferSelect;
 
 // ── Mapeo DB ↔ Dominio ──────────────────────────────────────────────────────────
 
 /** Compone el objeto `direccion` desde las columnas aplanadas en DB. */
-function mapearPropiedad(row: PropiedadRow): Propiedad {
-  return {
+function mapearPropiedad(
+  row: PropiedadRow,
+  opciones?: { fotos?: FotoPropiedad[] },
+): Propiedad {
+  const base: Propiedad = {
     id: row.id,
     nombre: row.nombre,
     tipo: row.tipo as PropiedadTipo,
@@ -26,6 +30,8 @@ function mapearPropiedad(row: PropiedadRow): Propiedad {
       estado: row.estado,
     },
   };
+  if (opciones?.fotos) base.fotos = opciones.fotos;
+  return base;
 }
 
 // ── Servicio ─────────────────────────────────────────────────────────────────────
@@ -52,7 +58,28 @@ export const propiedadesService = {
       .where(condiciones.length > 0 ? and(...condiciones) : undefined)
       .orderBy(desc(propiedades.creadaEn));
 
-    return filas.map(mapearPropiedad);
+    if (filas.length === 0) return [];
+
+    // Cargar fotos en un solo query batch (un join por propiedad degradaría
+    // a N+1 filas; un WHERE IN con todos los IDs es O(1) round-trips).
+    const ids = filas.map((f) => f.id);
+    const todasLasFotos = await db
+      .select()
+      .from(propiedadFotos)
+      .where(inArray(propiedadFotos.propiedadId, ids))
+      .orderBy(asc(propiedadFotos.orden), asc(propiedadFotos.subidaEn));
+
+    const fotosPorPropiedad = new Map<string, FotoPropiedad[]>();
+    for (const filaFoto of todasLasFotos) {
+      const lista = fotosPorPropiedad.get(filaFoto.propiedadId) ?? [];
+      lista.push(mapearFotoInterno(filaFoto));
+      fotosPorPropiedad.set(filaFoto.propiedadId, lista);
+    }
+
+    return filas.map((row) => {
+      const fotos = fotosPorPropiedad.get(row.id) ?? [];
+      return mapearPropiedad(row, { fotos: fotos.length > 0 ? fotos : undefined });
+    });
   },
 
   async obtenerPorId(id: string): Promise<Propiedad | null> {
@@ -63,7 +90,8 @@ export const propiedadesService = {
       .limit(1);
 
     if (filas.length === 0 || !filas[0]) return null;
-    return mapearPropiedad(filas[0]);
+    const fotos = await fotosService.listarPorPropiedad(filas[0].id);
+    return mapearPropiedad(filas[0], { fotos });
   },
 
   async crear(datos: PropiedadEntrada): Promise<Propiedad> {

@@ -1,3 +1,5 @@
+import type { Direccion } from './propiedades';
+
 /** Datos personales del inquilino */
 export interface Inquilino {
   id: string;
@@ -11,6 +13,18 @@ export interface Inquilino {
   activo: boolean;
   creadoEn: string;
   actualizadoEn: string;
+
+  // ── Campos opcionales para el PDF (no requieren migración DB) ────────────
+  /** Tipo y número de identificación oficial (INE, pasaporte, etc.). */
+  identificacionOficial?: string;
+  /** Estado civil (soltero, casado, etc.). */
+  estadoCivil?: string;
+  /** Nacionalidad. */
+  nacionalidad?: string;
+  /** Ocupación o profesión. */
+  ocupacion?: string;
+  /** Domicilio particular del inquilino (no la propiedad arrendada). */
+  domicilio?: Direccion;
 }
 
 /** Referencia personal o laboral */

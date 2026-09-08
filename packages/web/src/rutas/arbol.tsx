@@ -1,5 +1,6 @@
 import { RootRoute, Route } from '@tanstack/react-router';
 import { AppLayout } from '@/core/layout/AppLayout';
+import { PortalLayout } from '@/core/layout/PortalLayout';
 import { DashboardPage } from '@/modulos/dashboard/DashboardPage';
 import { PropiedadesPage } from '@/modulos/propiedades/PropiedadesPage';
 import { PropiedadCrearPage } from '@/modulos/propiedades/PropiedadCrearPage';
@@ -25,12 +26,30 @@ import { FacturaCrearPage } from '@/modulos/facturacion/FacturaCrearPage';
 import { FacturaDetallePage } from '@/modulos/facturacion/FacturaDetallePage';
 import { LoginPage } from '@/modulos/auth/LoginPage';
 import { InteligenciaPage } from '@/modulos/inteligencia/InteligenciaPage';
+import { MiContratoPage } from '@/modulos/portal/MiContratoPage';
+
+/**
+ * Decodifica el payload (sin verificar firma — el server lo hace) del JWT
+ * guardado en localStorage. Devuelve null si no hay token o está mal formado.
+ */
+function leerSesion(): { rol?: string } | null {
+  const token = localStorage.getItem('token');
+  if (!token) return null;
+  const partes = token.split('.');
+  if (partes.length !== 3) return null;
+  try {
+    return JSON.parse(atob(partes[1]!));
+  } catch {
+    return null;
+  }
+}
 
 // ── Raíz ───────────────────────────────────────────────────────────────────────
 const rootRoute = new RootRoute({
   beforeLoad: () => {
     const path = window.location.pathname;
-    if (path === '/login') return;
+    // Rutas públicas: login (admin/operador) y login del portal
+    if (path === '/login' || path === '/portal/login') return;
     if (!localStorage.getItem('token')) {
       window.location.href = '/login';
     }
@@ -196,9 +215,46 @@ const inteligenciaRoute = new Route({
   component: InteligenciaPage,
 });
 
+// ── Portal del Inquilino ──────────────────────────────────────────────────────
+//
+// Grupo de rutas con su propio layout (sin sidebar admin). El beforeLoad del
+// layout rechaza a cualquier usuario cuyo JWT no sea rol='inquilino'.
+//
+// Login del portal: hijo de rootRoute (NO del portalLayoutRoute) para que sea
+// accesible sin estar dentro del layout del portal — igual que /login.
+
+const portalLoginRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/portal/login',
+  component: LoginPage,
+});
+
+const portalLayoutRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/portal',
+  component: PortalLayout,
+  beforeLoad: () => {
+    const sesion = leerSesion();
+    if (sesion?.rol !== 'inquilino') {
+      window.location.href = '/login';
+    }
+  },
+});
+
+const miContratoPortalRoute = new Route({
+  getParentRoute: () => portalLayoutRoute,
+  path: '/mi-contrato',
+  component: MiContratoPage,
+});
+
+const portalLayoutRouteWithChildren = portalLayoutRoute.addChildren([
+  miContratoPortalRoute,
+]);
+
 // ── Árbol ──────────────────────────────────────────────────────────────────────
 export const routeTree = rootRoute.addChildren([
   loginRoute,
+  portalLoginRoute,
   indexRoute,
   propiedadesRoute,
   propiedadCrearRoute,
@@ -223,4 +279,5 @@ export const routeTree = rootRoute.addChildren([
   facturacionCrearRoute,
   facturacionDetalleRoute,
   inteligenciaRoute,
+  portalLayoutRouteWithChildren,
 ]);

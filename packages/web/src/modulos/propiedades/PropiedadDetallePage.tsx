@@ -4,6 +4,7 @@ import { ArrowLeft, Power, PowerOff, MapPin, Home } from 'lucide-react';
 import { propiedadesAPI } from '@/services/propiedades.api';
 import { cn } from '@/core/ui/cn';
 import type { PropiedadTipo } from '@proyecto-modular/shared/tipos/propiedades';
+import { GaleriaPropiedad } from './GaleriaPropiedad';
 
 const TIPO_LABELS: Record<PropiedadTipo, string> = {
   casa: 'Casa',
@@ -89,6 +90,9 @@ export function PropiedadDetallePage() {
           </div>
         </div>
       </div>
+
+      {/* ── Galería de fotos ────────────────────────────────────────────────── */}
+      <GaleriaPropiedad propiedadId={id} fotos={propiedad.fotos ?? []} />
 
       {/* ── Acciones ─────────────────────────────────────────────────────────── */}
       <div className="flex items-center gap-3 pt-2">

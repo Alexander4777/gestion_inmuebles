@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { reciboEsquema } from '@proyecto-modular/shared/esquemas/recibos';
 import { requerirAuth } from '../../core/auth';
 import { recibosService } from './recibos.service';
+import { generarPDFRecibo } from './recibos.pdf';
 
 export const recibosRouter = Router();
 
@@ -35,6 +36,29 @@ recibosRouter.get('/:id', async (req, res) => {
   } catch (error) {
     console.error('Error al obtener recibo:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+// ── GET /:id/pdf — Descargar recibo en PDF ───────────────────────────────────────
+recibosRouter.get('/:id/pdf', async (req, res) => {
+  try {
+    const recibo = await recibosService.obtenerPorId(req.params.id);
+    if (!recibo) {
+      res.status(404).json({ error: 'Recibo no encontrado' });
+      return;
+    }
+
+    const buffer = await generarPDFRecibo(recibo);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="recibo-${recibo.numeroRecibo}.pdf"`,
+    );
+    res.setHeader('Content-Length', buffer.byteLength.toString());
+    res.send(buffer);
+  } catch (error) {
+    console.error('Error al generar PDF del recibo:', error);
+    res.status(500).json({ error: 'Error al generar el PDF' });
   }
 });
 

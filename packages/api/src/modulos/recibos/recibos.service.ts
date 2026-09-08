@@ -3,6 +3,71 @@ import { recibos, contratos, inquilinos, propiedades } from '../../core/db/esque
 import { eq, and, desc, sql } from 'drizzle-orm';
 import type { ReciboEntrada } from '@proyecto-modular/shared/esquemas/recibos';
 import type { Recibo, DetalleRecibo } from '@proyecto-modular/shared/tipos/recibos';
+import type { Contrato } from '@proyecto-modular/shared/tipos/contratos';
+import type { Inquilino } from '@proyecto-modular/shared/tipos/inquilinos';
+import type { Propiedad } from '@proyecto-modular/shared/tipos/propiedades';
+
+// ── Tipos de filas de la DB ──────────────────────────────────────────────────────
+
+type ContratoRow = typeof contratos.$inferSelect;
+type InquilinoRow = typeof inquilinos.$inferSelect;
+type PropiedadRow = typeof propiedades.$inferSelect;
+
+// ── Mapeo DB ↔ Dominio (duplicado de contratos.service para mantener módulos
+// — auto-contenidos; la re-extracción a core/db/mapeadores.ts queda pendiente
+// como follow-up cuando aparezca un tercer consumidor). ───────────────────────────
+
+function mapearPropiedad(row: PropiedadRow): Propiedad {
+  return {
+    id: row.id,
+    nombre: row.nombre,
+    tipo: row.tipo as Propiedad['tipo'],
+    activa: row.activa,
+    creadaEn: row.creadaEn.toISOString(),
+    actualizadaEn: row.actualizadaEn.toISOString(),
+    direccion: {
+      calle: row.calle,
+      numero: row.numero,
+      colonia: row.colonia,
+      codigoPostal: row.codigoPostal,
+      ciudad: row.ciudad,
+      estado: row.estado,
+    },
+  };
+}
+
+function mapearInquilino(row: InquilinoRow): Inquilino {
+  return {
+    id: row.id,
+    nombre: row.nombre,
+    apellidoPaterno: row.apellidoPaterno,
+    apellidoMaterno: row.apellidoMaterno,
+    rfc: row.rfc ?? undefined,
+    curp: row.curp ?? undefined,
+    telefono: row.telefono,
+    correo: row.correo ?? undefined,
+    activo: row.activo,
+    creadoEn: row.creadoEn.toISOString(),
+    actualizadoEn: row.actualizadoEn.toISOString(),
+  };
+}
+
+function mapearContrato(row: ContratoRow): Contrato {
+  return {
+    id: row.id,
+    propiedadId: row.propiedadId,
+    inquilinoId: row.inquilinoId,
+    fechaInicio: row.fechaInicio,
+    fechaFin: row.fechaFin,
+    rentaMensual: Number(row.rentaMensual),
+    deposito: Number(row.deposito),
+    periodicidadPago: row.periodicidadPago as Contrato['periodicidadPago'],
+    estatus: row.estatus as Contrato['estatus'],
+    activo: row.activo,
+    creadoEn: row.creadoEn.toISOString(),
+    actualizadoEn: row.actualizadoEn.toISOString(),
+  };
+}
 
 // ── DB ↔ Domain mapping ─────────────────────────────────────────────────────────
 
@@ -75,7 +140,12 @@ export const recibosService = {
   /** Obtiene un recibo por ID, incluyendo datos del contrato, inquilino y propiedad */
   async obtenerPorId(id: string): Promise<DetalleRecibo | null> {
     const filas = await db
-      .select()
+      .select({
+        recibo: recibos,
+        contrato: contratos,
+        inquilino: inquilinos,
+        propiedad: propiedades,
+      })
       .from(recibos)
       .leftJoin(contratos, eq(recibos.contratoId, contratos.id))
       .leftJoin(inquilinos, eq(contratos.inquilinoId, inquilinos.id))
@@ -87,8 +157,13 @@ export const recibosService = {
 
     const fila = filas[0];
     return {
-      ...mapearARecibo(fila.recibos),
+      ...mapearARecibo(fila.recibo),
+      // El `desglose` no se persiste todavía (gap conocido en el esquema);
+      // queda como array vacío para no romper el tipo `DetalleRecibo`.
       desglose: [],
+      contrato: fila.contrato ? mapearContrato(fila.contrato) : undefined,
+      inquilino: fila.inquilino ? mapearInquilino(fila.inquilino) : undefined,
+      propiedad: fila.propiedad ? mapearPropiedad(fila.propiedad) : undefined,
     };
   },
 

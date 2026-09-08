@@ -1,0 +1,1 @@
+ALTER TABLE "inquilinos" ADD COLUMN "password_hash" text;

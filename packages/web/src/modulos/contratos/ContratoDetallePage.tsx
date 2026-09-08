@@ -1,6 +1,7 @@
 import { useParams, Link } from '@tanstack/react-router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ArrowLeft, CheckCircle2, Ban } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Ban, Printer } from 'lucide-react';
+import { useState } from 'react';
 import { contratosAPI } from '@/services/contratos.api';
 import { cn } from '@/core/ui/cn';
 import type { EstatusContrato } from '@proyecto-modular/shared/tipos/contratos';
@@ -25,6 +26,7 @@ function formatearFecha(fecha: string): string {
 export function ContratoDetallePage() {
   const { id } = useParams({ strict: false }) as { id: string };
   const queryClient = useQueryClient();
+  const [imprimiendo, setImprimiendo] = useState(false);
 
   const { data: contrato, isLoading, error } = useQuery({
     queryKey: ['contratos', id],
@@ -40,6 +42,18 @@ export function ContratoDetallePage() {
     mutationFn: () => contratosAPI.actualizar(id, { estatus: 'cancelado' }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['contratos'] }),
   });
+
+  const handleImprimir = async () => {
+    setImprimiendo(true);
+    try {
+      await contratosAPI.descargarPDF(id);
+    } catch (err) {
+      const mensaje = err instanceof Error ? err.message : 'No se pudo generar el PDF';
+      alert(mensaje);
+    } finally {
+      setImprimiendo(false);
+    }
+  };
 
   if (isLoading) return <p className="text-muted-foreground">Cargando contrato…</p>;
   if (error || !contrato)
@@ -83,6 +97,14 @@ export function ContratoDetallePage() {
           </div>
           <p className="text-sm text-muted-foreground mt-1 font-mono text-xs">{contrato.id}</p>
         </div>
+        <button
+          onClick={handleImprimir}
+          disabled={imprimiendo}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-card text-sm font-medium hover:bg-secondary transition-colors disabled:opacity-50"
+        >
+          <Printer size={18} />
+          {imprimiendo ? 'Generando PDF…' : 'Imprimir contrato'}
+        </button>
       </div>
 
       {/* ── Resumen financiero ──────────────────────────────────────────────── */}

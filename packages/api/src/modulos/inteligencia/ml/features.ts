@@ -301,7 +301,7 @@ export async function extraerDatasetVacancia(): Promise<DatasetListo> {
     fecha_inicio: string;
     fecha_fin: string;
     activo: boolean;
-    actualizado_en: string;
+    actualizada_en: string;
     renta_mensual: string;
     deposito: string;
     inquilino_id: string;
@@ -313,7 +313,7 @@ export async function extraerDatasetVacancia(): Promise<DatasetListo> {
       c.fecha_inicio,
       c.fecha_fin,
       c.activo,
-      c.actualizado_en,
+      c.actualizada_en,
       c.renta_mensual,
       c.deposito,
       c.inquilino_id,

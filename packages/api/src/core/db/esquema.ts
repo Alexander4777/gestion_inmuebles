@@ -4,6 +4,7 @@ import {
   varchar,
   text,
   numeric,
+  integer,
   date,
   boolean,
   timestamp,
@@ -75,6 +76,27 @@ export const propiedades = pgTable('propiedades', {
     .$onUpdate(() => new Date()),
 });
 
+// Fotos asociadas a una propiedad. El archivo físico vive en disco
+// (packages/api/data/propiedades/<propiedadId>/<nombre_archivo>) y se sirve
+// vía express.static('/uploads'). La cascada al borrar la propiedad limpia
+// las filas; los archivos se eliminan en el service.
+export const propiedadFotos = pgTable('propiedad_fotos', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  propiedadId: uuid('propiedad_id')
+    .notNull()
+    .references(() => propiedades.id, { onDelete: 'cascade' }),
+  // Nombre en disco: <uuid>.<ext>. Nunca se usa el nombre original del
+  // cliente para evitar path traversal y colisiones.
+  nombreArchivo: varchar('nombre_archivo', { length: 255 }).notNull(),
+  // Nombre que tenía el archivo en el cliente, para mostrar en UI.
+  nombreOriginal: varchar('nombre_original', { length: 255 }).notNull(),
+  mimeType: varchar('mime_type', { length: 50 }).notNull(),
+  tamanoBytes: integer('tamano_bytes').notNull(),
+  orden: integer('orden').notNull().default(0),
+  esPortada: boolean('es_portada').notNull().default(false),
+  subidaEn: timestamp('subida_en').notNull().defaultNow(),
+});
+
 export const inquilinos = pgTable('inquilinos', {
   id: uuid('id').defaultRandom().primaryKey(),
   nombre: varchar('nombre', { length: 100 }).notNull(),
@@ -84,6 +106,9 @@ export const inquilinos = pgTable('inquilinos', {
   curp: varchar('curp', { length: 18 }),
   telefono: varchar('telefono', { length: 15 }).notNull(),
   correo: varchar('correo', { length: 200 }),
+  // Hash bcrypt. NULL = el inquilino aún no tiene cuenta en el portal.
+  // El admin la establece vía POST /api/inquilinos/:id/cuenta.
+  passwordHash: text('password_hash'),
   activo: boolean('activo').notNull().default(true),
   creadoEn: timestamp('creado_en').notNull().defaultNow(),
   actualizadoEn: timestamp('actualizada_en')

@@ -116,4 +116,19 @@ export const inquilinosService = {
       .where(eq(inquilinos.id, id));
     return (resultado.rowCount ?? 0) > 0;
   },
+
+  /**
+   * Fija (o reemplaza) la contraseña del portal para un inquilino.
+   * Hashea con bcrypt (cost 10) y persiste.
+   * Retorna `true` si el inquilino existía, `false` si no.
+   */
+  async establecerPassword(id: string, passwordPlano: string): Promise<boolean> {
+    const bcrypt = await import('bcryptjs');
+    const hash = await bcrypt.default.hash(passwordPlano, 10);
+    const resultado = await db
+      .update(inquilinos)
+      .set({ passwordHash: hash })
+      .where(eq(inquilinos.id, id));
+    return (resultado.rowCount ?? 0) > 0;
+  },
 };
